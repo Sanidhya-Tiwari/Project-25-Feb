@@ -5,20 +5,19 @@ import { Heart, Star, Gift, Sparkles, Trash2, Music } from 'lucide-react';
 const DecorationType = {
   HEART: 0,
   STAR: 1,
-  GIFT: 2
+  GIFT: 2,
 };
 
 const COLORS = {
   [DecorationType.HEART]: ['text-pink-500', 'text-red-500', 'text-purple-500'],
   [DecorationType.STAR]: ['text-yellow-400', 'text-purple-500', 'text-blue-400'],
-  [DecorationType.GIFT]: ['text-red-500', 'text-green-500', 'text-blue-500']
+  [DecorationType.GIFT]: ['text-red-500', 'text-green-500', 'text-blue-500'],
 };
 
-// Musical notes for each decoration type
 const NOTES = {
   [DecorationType.HEART]: ['C4', 'E4', 'G4'],
   [DecorationType.STAR]: ['D4', 'F4', 'A4'],
-  [DecorationType.GIFT]: ['E4', 'G4', 'B4']
+  [DecorationType.GIFT]: ['E4', 'G4', 'B4'],
 };
 
 interface Decoration {
@@ -47,7 +46,6 @@ export const Room: React.FC<RoomProps> = ({ onComplete, isLightOn }) => {
   const oscillator = useRef<OscillatorNode | null>(null);
 
   useEffect(() => {
-    // Initialize AudioContext
     audioContext.current = new (window.AudioContext || (window as any).webkitAudioContext)();
     return () => {
       if (audioContext.current) {
@@ -59,38 +57,34 @@ export const Room: React.FC<RoomProps> = ({ onComplete, isLightOn }) => {
   const playNote = (note: string) => {
     if (isMuted || !audioContext.current) return;
 
-    // Convert note name to frequency
     const noteToFreq: { [key: string]: number } = {
       'C4': 261.63, 'D4': 293.66, 'E4': 329.63,
       'F4': 349.23, 'G4': 392.00, 'A4': 440.00,
-      'B4': 493.88
+      'B4': 493.88,
     };
 
     const frequency = noteToFreq[note];
-    
-    // Create and configure oscillator
     const osc = audioContext.current.createOscillator();
     const gainNode = audioContext.current.createGain();
-    
+
     osc.type = 'sine';
     osc.frequency.setValueAtTime(frequency, audioContext.current.currentTime);
-    
     gainNode.gain.setValueAtTime(0.5, audioContext.current.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.current.currentTime + 0.5);
-    
+
     osc.connect(gainNode);
     gainNode.connect(audioContext.current.destination);
-    
+
     osc.start();
     osc.stop(audioContext.current.currentTime + 0.5);
   };
 
   const addDecoration = (x: number, y: number) => {
     if (isErasing) return;
-    
+
     const note = NOTES[selectedTool][Math.floor(Math.random() * NOTES[selectedTool].length)];
     playNote(note);
-    
+
     const newDecoration: Decoration = {
       id: `dec-${Date.now()}`,
       x,
@@ -99,7 +93,7 @@ export const Room: React.FC<RoomProps> = ({ onComplete, isLightOn }) => {
       size: Math.random() * 16 + 24,
       color: COLORS[selectedTool][Math.floor(Math.random() * COLORS[selectedTool].length)],
       rotation: Math.random() * 360,
-      note
+      note,
     };
     setDecorations([...decorations, newDecoration]);
   };
@@ -108,10 +102,10 @@ export const Room: React.FC<RoomProps> = ({ onComplete, isLightOn }) => {
     e.stopPropagation();
     if (isErasing) {
       setDecorations(decorations.filter(d => d.id !== decoration.id));
-      playNote(decoration.note); // Play note when removing
+      playNote(decoration.note);
     } else {
       setSelectedDecoration(selectedDecoration === decoration.id ? null : decoration.id);
-      playNote(decoration.note); // Play note when selecting
+      playNote(decoration.note);
     }
   };
 
@@ -120,10 +114,10 @@ export const Room: React.FC<RoomProps> = ({ onComplete, isLightOn }) => {
     const props = {
       size: decoration.size,
       className: `${decoration.color} ${isSelected ? 'ring-2 ring-offset-2 ring-blue-500' : ''}`,
-      style: { 
+      style: {
         transform: `rotate(${decoration.rotation}deg)`,
-        animation: 'sparkle 1.5s infinite'
-      }
+        animation: 'sparkle 1.5s infinite',
+      },
     };
 
     switch (decoration.type) {
@@ -150,6 +144,18 @@ export const Room: React.FC<RoomProps> = ({ onComplete, isLightOn }) => {
         addDecoration(e.clientX - rect.left, e.clientY - rect.top);
       }}
     >
+      {/* Background Text */}
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.5}} // Adjust opacity for subtlety
+        transition={{ duration: 1 }}
+      >
+        <h1 className="text-9xl font-bold text-gray-300 select-none">
+          Tap!  Tap!
+        </h1>
+      </motion.div>
+
       {isLightOn && (
         <>
           {/* Toolbar */}
@@ -207,28 +213,28 @@ export const Room: React.FC<RoomProps> = ({ onComplete, isLightOn }) => {
               key={decoration.id}
               className="absolute"
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ 
-                scale: 1, 
+              animate={{
+                scale: 1,
                 opacity: 1,
                 x: decoration.x - decoration.size / 2,
-                y: decoration.y - decoration.size / 2
+                y: decoration.y - decoration.size / 2,
               }}
               whileHover={{ scale: 1.1 }}
               drag={!isErasing}
               dragMomentum={false}
               onDragEnd={(_, info) => {
-                const updatedDecorations = decorations.map(d => {
+                const updatedDecorations = decorations.map((d) => {
                   if (d.id === decoration.id) {
                     return {
                       ...d,
                       x: d.x + info.offset.x,
-                      y: d.y + info.offset.y
+                      y: d.y + info.offset.y,
                     };
                   }
                   return d;
                 });
                 setDecorations(updatedDecorations);
-                playNote(decoration.note); // Play note when finishing drag
+                playNote(decoration.note);
               }}
               onClick={(e) => handleDecorationClick(e, decoration)}
             >

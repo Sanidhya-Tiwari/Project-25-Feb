@@ -47,7 +47,7 @@ export const CakeCeremony: React.FC<CakeCeremonyProps> = ({ onComplete }) => {
         {!isCut ? (
           <span>✨ Drag down to cut the cake! ✨</span>
         ) : (
-          <span>🎉 Happy Birthday Madam Jiiii! 🎉</span>
+          <span>🎉🎂 Happy Birthday Madam Jiiii! 🎂🎉</span>
         )}
       </div>
 
@@ -167,7 +167,7 @@ export const CakeCeremony: React.FC<CakeCeremonyProps> = ({ onComplete }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          Make a wish! ⭐️
+          Make a wish! ✨⭐️ I hope aapki saare wish puri ho jaaye....🤞🏼😊
         </motion.div>
       )}
     </motion.div>

@@ -24,7 +24,7 @@ export const FinalMessage: React.FC = () => {
         </motion.div>
 
         <h1 className="text-4xl font-bold text-center text-pink-600 mb-6">
-          Happy Birthday Madam Jiii!!
+          Happy Birthday Madam Jiii !! 🎂👸🏻
         </h1>
 
         {/* <p className="text-lg text-gray-700 leading-relaxed mb-6">
@@ -35,13 +35,15 @@ export const FinalMessage: React.FC = () => {
           You’re my chaos and my calm, my sweetest distraction and my fiercest addiction. The way you light up a room with your energy, the way you make my heart race with just a glance—every part of you leaves me breathless. I’m so lucky to have you, this feral, gorgeous, irresistible being who’s made my life so much better just by being in it.
         </p> */}
 
-        <p className="text-lg text-gray-700 leading-relaxed font-semibold text-center">
-          Words Won't Be Enough. So, I'm Just Saying "I Love You"🙈🤭... haa Firse!!
+        <p className="text-lg text-grey-700 leading-relaxed font-semibold text-center">
+          Words Won't Be Enough. So, I'm Just Saying{" "}
+          <span className="text-3xl text-pink-500 font-bold">I Love You🌹</span> 🙈🤭        Jii haa firse!! 💓
         </p>
 
         <div className="text-center mt-8 text-2xl">
-          With Love,
-          Your KuchuPuchu 'Khwaab me..., wo bhi mere' Always❤️
+          With Love, 
+          Aapka{" "}
+          <span className="text-2xl text-purple-600 font-bold">'बहुत प्यारा मित्र',</span> I guess❤️
         </div>
       </motion.div>
     </motion.div>
